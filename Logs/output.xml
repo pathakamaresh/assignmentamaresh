@@ -1,0 +1,644 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 4.1.3 (Python 3.10.3 on win32)" generated="20220410 10:30:53.761" rpa="false" schemaversion="2">
+<suite id="s1" name="Testcases" source="C:\Assignment\oppenheimerAutomation\Testcases">
+<suite id="s1-s1" name="Main" source="C:\Assignment\oppenheimerAutomation\Testcases\main.robot">
+<test id="s1-s1-t1" name="Test Application status">
+<kw name="Create Session" library="RequestsLibrary">
+<arg>mysession</arg>
+<arg>${base_url}</arg>
+<doc>Create Session: create a HTTP session to a server</doc>
+<msg timestamp="20220410 10:30:53.936" level="INFO">Creating Session using : alias=mysession, url=http://localhost:8080, headers={},                     cookies={}, auth=None, timeout=None, proxies=None, verify=False,                     debug=0 </msg>
+<status status="PASS" starttime="20220410 10:30:53.936" endtime="20220410 10:30:53.937"/>
+</kw>
+<kw name="Get Request" library="RequestsLibrary">
+<var>${response}</var>
+<arg>mysession</arg>
+<arg>/</arg>
+<doc>*DEPRECATED* Please use `GET On Session` instead.</doc>
+<msg timestamp="20220410 10:30:53.938" level="WARN">Keyword 'RequestsLibrary.Get Request' is deprecated. Please use `GET On Session` instead.</msg>
+<msg timestamp="20220410 10:30:55.046" level="INFO">GET Request : url=http://localhost:8080/ 
+ path_url=/ 
+ headers={'User-Agent': 'python-requests/2.27.1', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive'} 
+ body=None 
+ </msg>
+<msg timestamp="20220410 10:30:55.047" level="INFO">GET Response : url=http://localhost:8080/ 
+ status=200, reason= 
+ headers={'Content-Type': 'text/html;charset=UTF-8', 'Content-Language': 'en-IN', 'Transfer-Encoding': 'chunked', 'Date': 'Sun, 10 Apr 2022 05:00:55 GMT'} 
+ body=&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;Technical Challenge for CDS&lt;/title&gt;
+
+    &lt;link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet"&gt;
+    &lt;link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet"&gt;
+    &lt;link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+&lt;div class="container-fluid"&gt;
+    &lt;h1 class="display-4"&gt;The Oppenheimer Project&lt;/h1&gt;
+
+    &lt;blockquote class="blockquote"&gt;
+        &lt;p class="mb-0"&gt;to dispense each working class hero with taxation relief as recognition to their voluntary contribution to city building efforts&lt;/p&gt;
+        &lt;footer class="blockquote-footer"&gt;Governor to City of Carson &lt;cite title="Source Title"&gt;The Daily Guleb&lt;/cite&gt;&lt;/footer&gt;
+    &lt;/blockquote&gt;
+
+    &lt;div class="container"&gt;
+        &lt;p class="lead"&gt;
+            In the year 1969, the City of Carson is a growing city that houses close to millions of working class heroes. To support the growing city population, a bill was passed that:
+        &lt;/p&gt;
+        &lt;blockquote class="blockquote text-center"&gt;‘each working class hero is to contribute a fraction of their yearly income towards city building’&lt;/blockquote&gt;
+        &lt;p class="lead"&gt;&lt;br/&gt;
+            This year, as part of the governor’s initiative to pony up surplus cash in the vault, each working class hero is gifted with taxation relief as recognition to their voluntary contribution to city building efforts. To facilitate this, the governor has drafted out the Oppenheimer Project.
+            &lt;br/&gt;
+            This is a software system that has to support 3 features:
+        &lt;/p&gt;
+
+        &lt;ul class="list-group list-group-flush"&gt;
+            &lt;li class="list-group-item"&gt;Enable Clerks to populate a list of working class heroes to the system&lt;/li&gt;
+            &lt;li class="list-group-item"&gt;Enable Bookkeepers to retrieve the payable taxation relief for each working class hero&lt;/li&gt;
+            &lt;li class="list-group-item"&gt;Enable Governor to dispense the money to each working class hero at her discretion&lt;/li&gt;
+        &lt;/ul&gt;
+    &lt;/div&gt;
+
+
+
+    &lt;div class="container" id="contents-main"&gt;
+        &lt;div id="contents"&gt;
+            &lt;div class="input-group mb-3"&gt;
+                &lt;div class="input-group-prepend"&gt;
+                    &lt;span class="input-group-text"&gt;Upload CSV file&lt;/span&gt;
+                &lt;/div&gt;
+                &lt;div class="custom-file"&gt;
+                    &lt;label class="custom-file-label"&gt;Choose file&lt;/label&gt;
+                    &lt;input type="file" class="custom-file-input" ref="inputFile" @change="uploadFile"&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+
+            &lt;button type="button" class="btn btn-primary" v-on:click="refreshTaxRelief"&gt;Refresh Tax Relief Table&lt;/button&gt;
+            &lt;a class="btn btn-info" href="/swagger-ui.html" role="button"&gt;Visit Swagger&lt;/a&gt;
+            &lt;button type="button" class="btn btn-danger invisible" v-on:click="dropTable"&gt;Wipeout Everything &lt;/button&gt;
+
+            &lt;br/&gt;
+
+            &lt;div v-if="tax &amp;&amp; tax.length" class="m-4"&gt;
+                &lt;table class="table table-hover table-dark"&gt;
+                    &lt;caption&gt;List of working class heroes and their tax relief&lt;/caption&gt;
+                    &lt;thead&gt;
+                    &lt;tr&gt;
+                        &lt;th scope="col"&gt;NatId&lt;/th&gt;
+                        &lt;th scope="col"&gt;Relief&lt;/th&gt;
+                    &lt;/tr&gt;
+                    &lt;/thead&gt;
+                    &lt;tbody&gt;
+                    &lt;tr v-for="item in tax" :key="item.name"&gt;
+                        &lt;td&gt;{{ item.natid }}&lt;/td&gt;
+                        &lt;td&gt;{{ item.relief }}&lt;/td&gt;
+                    &lt;/tr&gt;
+                    &lt;/tbody&gt;
+                &lt;/table&gt;
+            &lt;/div&gt;
+            &lt;h1 v-else&gt;No records at the moment 😢&lt;/h1&gt;
+
+            &lt;div class="jumbotron jumbotron-fluid"&gt;
+                &lt;div class="container"&gt;
+                    &lt;h1 class="display-4"&gt;Total Tax Relieves&lt;/h1&gt;
+                    &lt;p class="lead"&gt;£{{summary.totalTaxReliefAmount}} will be dispensed to {{summary.totalWorkingClassHeroes}} Working Class Hero/s&lt;/p&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;a class="btn btn-danger btn-block" href="dispense" role="button" style="font-size: 5em"&gt;Dispense Now&lt;/a&gt;
+            &lt;a href="/swagger-ui.html" style="visibility:hidden;" &gt;Visit Swagger New&lt;/a&gt;
+        &lt;/div&gt;
+
+    &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;footer&gt;
+    &lt;div class="footer-copyright text-center py-3"&gt;© 2019 Copyright:
+        &lt;a href="/"&gt;CDS Coding Challenge with Swagger&lt;/a&gt;
+    &lt;/div&gt;
+&lt;/footer&gt;
+
+&lt;/body&gt;
+
+&lt;!--&lt;script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"&gt;&lt;/script&gt;--&gt;
+&lt;script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.21.1/babel.min.js"&gt;&lt;/script&gt;
+&lt;script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"&gt;&lt;/script&gt;
+&lt;script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"&gt;&lt;/script&gt;
+&lt;script src="https://unpkg.com/axios@0.17.1/dist/axios.min.js"&gt;&lt;/script&gt;
+&lt;script type="text/babel"&gt;
+
+    var app = new Vue({
+        el: '#contents',
+        data: {
+            file: "",
+            tax: [],
+            errors: [],
+            summary: {},
+            desserts: [
+                {name: 'Frozen Yogurt', calories: 159,},
+                {name: 'Ice cream sandwich', calories: 237,},
+                {name: 'Eclair', calories: 262,},
+                {name: 'Cupcake', calories: 305,},
+                {name: 'Gingerbread', calories: 356,},
+                {name: 'Jelly bean', calories: 375,},
+                {name: 'Lollipop', calories: 392,},
+                {name: 'Honeycomb', calories: 408,},
+                {name: 'Donut', calories: 452,},
+                {name: 'KitKat', calories: 518,},
+            ],
+        },
+        methods: {
+            uploadFile: function(event) {
+                console.log(event.target.files[0]);
+                let formData = new FormData();
+                formData.append('file', event.target.files[0]);
+
+                axios.post( '/calculator/uploadLargeFileForInsertionToDatabase',
+                    formData,
+                    {headers: {'Content-Type': 'multipart/form-data'}}
+                ).then(function(){console.log('SUCCESS!!');})
+                .catch(function(){console.log('FAILURE!!');});
+            },
+            refreshTaxRelief: function() {
+                axios.get('/calculator/taxRelief')
+                    .then(response =&gt; {
+                        console.log(response.data);
+                        this.tax = response.data;
+                        console.log('Details');
+                    })
+                    .catch(e =&gt; {
+                        this.errors.push(e);
+                });
+                axios.get('/calculator/taxReliefSummary')
+                    .then(response =&gt; {
+                        console.log(response.data);
+                        this.summary = response.data;
+                        console.log('Details');
+                    })
+                    .catch(e =&gt; {
+                        this.errors.push(e);
+                });
+            },
+            dropTable: function() {
+                axios.post('/calculator/rakeDatabase')
+                    .then((response) =&gt; {console.log(response.data)})
+                    .catch(e =&gt; {
+                        this.errors.push(e);
+                    });
+                axios.get('/calculator/taxRelief')
+                    .then(response =&gt; {
+                        console.log(response.data);
+                        this.tax = response.data;
+                        console.log('Details');
+                    })
+                    .catch(e =&gt; {
+                        this.errors.push(e);
+                });
+                axios.get('/calculator/taxReliefSummary')
+                    .then(response =&gt; {
+                        console.log(response.data);
+                        this.summary = response.data;
+                        console.log('Details');
+                    })
+                    .catch(e =&gt; {
+                        this.errors.push(e);
+                    });
+            }
+        },
+        created() {
+            axios.get('/calculator/taxRelief')
+                .then(response =&gt; {
+                    console.log(response.data);
+                    this.tax = response.data;
+                    console.log('Details');
+                })
+            .catch(e =&gt; {
+                this.errors.push(e);
+            });
+            axios.get('/calculator/taxReliefSummary')
+                .then(response =&gt; {
+                    console.log(response.data);
+                    this.summary = response.data;
+                    console.log('Details');
+                })
+                .catch(e =&gt; {
+                    this.errors.push(e);
+            });
+        },
+
+        });
+&lt;/script&gt;
+&lt;/html&gt;
+ 
+ </msg>
+<msg timestamp="20220410 10:30:55.048" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<status status="PASS" starttime="20220410 10:30:53.938" endtime="20220410 10:30:55.048"/>
+</kw>
+<kw name="Log To Console" library="BuiltIn">
+<arg>${response.status_code}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" starttime="20220410 10:30:55.049" endtime="20220410 10:30:55.051"/>
+</kw>
+<kw name="Convert To String" library="BuiltIn">
+<var>${status_code}</var>
+<arg>${response.status_code}</arg>
+<doc>Converts the given item to a Unicode string.</doc>
+<msg timestamp="20220410 10:30:55.054" level="INFO">${status_code} = 200</msg>
+<status status="PASS" starttime="20220410 10:30:55.053" endtime="20220410 10:30:55.055"/>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<arg>${status_code}</arg>
+<arg>200</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" starttime="20220410 10:30:55.055" endtime="20220410 10:30:55.056"/>
+</kw>
+<tag>appstatus</tag>
+<status status="PASS" starttime="20220410 10:30:53.935" endtime="20220410 10:30:55.057"/>
+</test>
+<test id="s1-s1-t2" name="User Story 1 Test Insert single working class">
+<kw name="Create Session" library="RequestsLibrary">
+<arg>mysession</arg>
+<arg>${base_url}</arg>
+<doc>Create Session: create a HTTP session to a server</doc>
+<msg timestamp="20220410 10:30:55.061" level="INFO">Creating Session using : alias=mysession, url=http://localhost:8080, headers={},                     cookies={}, auth=None, timeout=None, proxies=None, verify=False,                     debug=0 </msg>
+<status status="PASS" starttime="20220410 10:30:55.061" endtime="20220410 10:30:55.062"/>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<var>${body}</var>
+<arg>birthday=15121999</arg>
+<arg>gender=F</arg>
+<arg>name=John</arg>
+<arg>natid=N09676</arg>
+<arg>salary=6000</arg>
+<arg>tax=125.00</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<msg timestamp="20220410 10:30:55.063" level="INFO">${body} = {'birthday': '15121999', 'gender': 'F', 'name': 'John', 'natid': 'N09676', 'salary': '6000', 'tax': '125.00'}</msg>
+<status status="PASS" starttime="20220410 10:30:55.062" endtime="20220410 10:30:55.063"/>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<var>${header}</var>
+<arg>content-type=application/json</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<msg timestamp="20220410 10:30:55.064" level="INFO">${header} = {'content-type': 'application/json'}</msg>
+<status status="PASS" starttime="20220410 10:30:55.063" endtime="20220410 10:30:55.064"/>
+</kw>
+<kw name="Post Request" library="RequestsLibrary">
+<var>${response}</var>
+<arg>mysession</arg>
+<arg>/calculator/insert</arg>
+<arg>data=${body}</arg>
+<arg>headers=${header}</arg>
+<doc>*DEPRECATED* Please use `POST On Session` instead.</doc>
+<msg timestamp="20220410 10:30:55.067" level="WARN">Keyword 'RequestsLibrary.Post Request' is deprecated. Please use `POST On Session` instead.</msg>
+<msg timestamp="20220410 10:30:55.330" level="INFO">POST Request : url=http://localhost:8080/calculator/insert 
+ path_url=/calculator/insert 
+ headers={'User-Agent': 'python-requests/2.27.1', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive', 'content-type': 'application/json', 'Content-Length': '109'} 
+ body={"birthday": "15121999", "gender": "F", "name": "John", "natid": "N09676", "salary": "6000", "tax": "125.00"} 
+ </msg>
+<msg timestamp="20220410 10:30:55.330" level="INFO">POST Response : url=http://localhost:8080/calculator/insert 
+ status=202, reason= 
+ headers={'Content-Type': 'text/plain;charset=UTF-8', 'Content-Length': '7', 'Date': 'Sun, 10 Apr 2022 05:00:55 GMT'} 
+ body=Alright 
+ </msg>
+<msg timestamp="20220410 10:30:55.331" level="INFO">${response} = &lt;Response [202]&gt;</msg>
+<status status="PASS" starttime="20220410 10:30:55.067" endtime="20220410 10:30:55.331"/>
+</kw>
+<kw name="Log To Console" library="BuiltIn">
+<arg>${response.status_code}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" starttime="20220410 10:30:55.336" endtime="20220410 10:30:55.338"/>
+</kw>
+<kw name="Log To Console" library="BuiltIn">
+<arg>${response.content}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" starttime="20220410 10:30:55.346" endtime="20220410 10:30:55.348"/>
+</kw>
+<kw name="Convert To String" library="BuiltIn">
+<var>${status_code}</var>
+<arg>${response.status_code}</arg>
+<doc>Converts the given item to a Unicode string.</doc>
+<msg timestamp="20220410 10:30:55.350" level="INFO">${status_code} = 202</msg>
+<status status="PASS" starttime="20220410 10:30:55.348" endtime="20220410 10:30:55.350"/>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<arg>${status_code}</arg>
+<arg>202</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" starttime="20220410 10:30:55.350" endtime="20220410 10:30:55.351"/>
+</kw>
+<tag>single</tag>
+<status status="PASS" starttime="20220410 10:30:55.060" endtime="20220410 10:30:55.351"/>
+</test>
+<test id="s1-s1-t3" name="User Story 2 Test Insert multiple working class">
+<kw name="Create Session" library="RequestsLibrary">
+<arg>mysession</arg>
+<arg>${base_url}</arg>
+<doc>Create Session: create a HTTP session to a server</doc>
+<msg timestamp="20220410 10:30:55.355" level="INFO">Creating Session using : alias=mysession, url=http://localhost:8080, headers={},                     cookies={}, auth=None, timeout=None, proxies=None, verify=False,                     debug=0 </msg>
+<status status="PASS" starttime="20220410 10:30:55.355" endtime="20220410 10:30:55.356"/>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<var>${D1}</var>
+<arg>birthday=15121999</arg>
+<arg>gender=F</arg>
+<arg>name=John</arg>
+<arg>natid=N2676</arg>
+<arg>salary=2000</arg>
+<arg>tax=125.00</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<msg timestamp="20220410 10:30:55.362" level="INFO">${D1} = {'birthday': '15121999', 'gender': 'F', 'name': 'John', 'natid': 'N2676', 'salary': '2000', 'tax': '125.00'}</msg>
+<status status="PASS" starttime="20220410 10:30:55.361" endtime="20220410 10:30:55.362"/>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<var>${D2}</var>
+<arg>birthday=15121999</arg>
+<arg>gender=M</arg>
+<arg>name=John</arg>
+<arg>natid=N3676</arg>
+<arg>salary=3000</arg>
+<arg>tax=125.00</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<msg timestamp="20220410 10:30:55.363" level="INFO">${D2} = {'birthday': '15121999', 'gender': 'M', 'name': 'John', 'natid': 'N3676', 'salary': '3000', 'tax': '125.00'}</msg>
+<status status="PASS" starttime="20220410 10:30:55.362" endtime="20220410 10:30:55.363"/>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<var>${D3}</var>
+<arg>birthday=15121999</arg>
+<arg>gender=F</arg>
+<arg>name=John</arg>
+<arg>natid=N4676</arg>
+<arg>salary=4000</arg>
+<arg>tax=125.00</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<msg timestamp="20220410 10:30:55.364" level="INFO">${D3} = {'birthday': '15121999', 'gender': 'F', 'name': 'John', 'natid': 'N4676', 'salary': '4000', 'tax': '125.00'}</msg>
+<status status="PASS" starttime="20220410 10:30:55.363" endtime="20220410 10:30:55.364"/>
+</kw>
+<kw name="Create List" library="BuiltIn">
+<var>@{body}</var>
+<arg>${D1}</arg>
+<arg>${D2}</arg>
+<arg>${D3}</arg>
+<doc>Returns a list containing given items.</doc>
+<msg timestamp="20220410 10:30:55.365" level="INFO">@{body} = [ {'birthday': '15121999', 'gender': 'F', 'name': 'John', 'natid': 'N2676', 'salary': '2000', 'tax': '125.00'} | {'birthday': '15121999', 'gender': 'M', 'name': 'John', 'natid': 'N3676', 'salary': '30...</msg>
+<status status="PASS" starttime="20220410 10:30:55.364" endtime="20220410 10:30:55.365"/>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<var>${header}</var>
+<arg>content-type=application/json</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<msg timestamp="20220410 10:30:55.366" level="INFO">${header} = {'content-type': 'application/json'}</msg>
+<status status="PASS" starttime="20220410 10:30:55.365" endtime="20220410 10:30:55.366"/>
+</kw>
+<kw name="Post Request" library="RequestsLibrary">
+<var>${response}</var>
+<arg>mysession</arg>
+<arg>/calculator/insertMultiple</arg>
+<arg>data=@{body}</arg>
+<arg>headers=${header}</arg>
+<doc>*DEPRECATED* Please use `POST On Session` instead.</doc>
+<msg timestamp="20220410 10:30:55.366" level="WARN">Keyword 'RequestsLibrary.Post Request' is deprecated. Please use `POST On Session` instead.</msg>
+<msg timestamp="20220410 10:30:55.399" level="INFO">POST Request : url=http://localhost:8080/calculator/insertMultiple 
+ path_url=/calculator/insertMultiple 
+ headers={'User-Agent': 'python-requests/2.27.1', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive', 'content-type': 'application/json', 'Content-Length': '330'} 
+ body=[{"birthday": "15121999", "gender": "F", "name": "John", "natid": "N2676", "salary": "2000", "tax": "125.00"}, {"birthday": "15121999", "gender": "M", "name": "John", "natid": "N3676", "salary": "3000", "tax": "125.00"}, {"birthday": "15121999", "gender": "F", "name": "John", "natid": "N4676", "salary": "4000", "tax": "125.00"}] 
+ </msg>
+<msg timestamp="20220410 10:30:55.399" level="INFO">POST Response : url=http://localhost:8080/calculator/insertMultiple 
+ status=202, reason= 
+ headers={'Content-Type': 'text/plain;charset=UTF-8', 'Content-Length': '7', 'Date': 'Sun, 10 Apr 2022 05:00:55 GMT'} 
+ body=Alright 
+ </msg>
+<msg timestamp="20220410 10:30:55.399" level="INFO">${response} = &lt;Response [202]&gt;</msg>
+<status status="PASS" starttime="20220410 10:30:55.366" endtime="20220410 10:30:55.399"/>
+</kw>
+<kw name="Log To Console" library="BuiltIn">
+<arg>${response.status_code}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" starttime="20220410 10:30:55.419" endtime="20220410 10:30:55.421"/>
+</kw>
+<kw name="Log To Console" library="BuiltIn">
+<arg>${response.content}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" starttime="20220410 10:30:55.421" endtime="20220410 10:30:55.424"/>
+</kw>
+<kw name="Convert To String" library="BuiltIn">
+<var>${status_code}</var>
+<arg>${response.status_code}</arg>
+<doc>Converts the given item to a Unicode string.</doc>
+<msg timestamp="20220410 10:30:55.427" level="INFO">${status_code} = 202</msg>
+<status status="PASS" starttime="20220410 10:30:55.425" endtime="20220410 10:30:55.427"/>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<arg>${status_code}</arg>
+<arg>202</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" starttime="20220410 10:30:55.429" endtime="20220410 10:30:55.429"/>
+</kw>
+<tag>multi</tag>
+<status status="PASS" starttime="20220410 10:30:55.354" endtime="20220410 10:30:55.431"/>
+</test>
+<test id="s1-s1-t4" name="User Story 4 Test Tax relief Get">
+<kw name="Create Session" library="RequestsLibrary">
+<arg>mysession</arg>
+<arg>${base_url}</arg>
+<doc>Create Session: create a HTTP session to a server</doc>
+<msg timestamp="20220410 10:30:55.435" level="INFO">Creating Session using : alias=mysession, url=http://localhost:8080, headers={},                     cookies={}, auth=None, timeout=None, proxies=None, verify=False,                     debug=0 </msg>
+<status status="PASS" starttime="20220410 10:30:55.434" endtime="20220410 10:30:55.435"/>
+</kw>
+<kw name="Get Request" library="RequestsLibrary">
+<var>${response}</var>
+<arg>mysession</arg>
+<arg>/calculator/taxRelief</arg>
+<doc>*DEPRECATED* Please use `GET On Session` instead.</doc>
+<msg timestamp="20220410 10:30:55.443" level="WARN">Keyword 'RequestsLibrary.Get Request' is deprecated. Please use `GET On Session` instead.</msg>
+<msg timestamp="20220410 10:30:55.543" level="INFO">GET Request : url=http://localhost:8080/calculator/taxRelief 
+ path_url=/calculator/taxRelief 
+ headers={'User-Agent': 'python-requests/2.27.1', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive'} 
+ body=None 
+ </msg>
+<msg timestamp="20220410 10:30:55.543" level="INFO">GET Response : url=http://localhost:8080/calculator/taxRelief 
+ status=200, reason= 
+ headers={'Content-Type': 'application/json;charset=UTF-8', 'Transfer-Encoding': 'chunked', 'Date': 'Sun, 10 Apr 2022 05:00:55 GMT'} 
+ body=[{"natid":"N096$$","name":"John","relief":"5200.00"},{"natid":"N267$","name":"John","relief":"2000.00"},{"natid":"N367$","name":"John","relief":"2300.00"},{"natid":"N467$","name":"John","relief":"3600.00"}] 
+ </msg>
+<msg timestamp="20220410 10:30:55.543" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<status status="PASS" starttime="20220410 10:30:55.443" endtime="20220410 10:30:55.543"/>
+</kw>
+<kw name="Log To Console" library="BuiltIn">
+<arg>${response.status_code}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" starttime="20220410 10:30:55.545" endtime="20220410 10:30:55.547"/>
+</kw>
+<kw name="Log To Console" library="BuiltIn">
+<arg>${response.content}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" starttime="20220410 10:30:55.548" endtime="20220410 10:30:55.550"/>
+</kw>
+<kw name="Convert To String" library="BuiltIn">
+<var>${status_code}</var>
+<arg>${response.status_code}</arg>
+<doc>Converts the given item to a Unicode string.</doc>
+<msg timestamp="20220410 10:30:55.552" level="INFO">${status_code} = 200</msg>
+<status status="PASS" starttime="20220410 10:30:55.551" endtime="20220410 10:30:55.552"/>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<arg>${status_code}</arg>
+<arg>200</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" starttime="20220410 10:30:55.553" endtime="20220410 10:30:55.553"/>
+</kw>
+<kw name="natid validation" library="Tax">
+<var>${natidformat}</var>
+<arg>${response.content}</arg>
+<doc>Created by : Amaresh Pathak
+Date : 19/03/2022
+This keyword is designed to validate natid value. All chars after 4 chars should be replaced
+with $</doc>
+<msg timestamp="20220410 10:30:55.555" level="INFO">Pass $ - 5
+Pass $ - 6
+Pass $ - 5
+Pass $ - 5
+Pass $ - 5</msg>
+<msg timestamp="20220410 10:30:55.555" level="INFO">${natidformat} = True</msg>
+<status status="PASS" starttime="20220410 10:30:55.554" endtime="20220410 10:30:55.555"/>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<arg>${natidformat}</arg>
+<arg>True</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" starttime="20220410 10:30:55.556" endtime="20220410 10:30:55.557"/>
+</kw>
+<tag>taxrelief</tag>
+<status status="PASS" starttime="20220410 10:30:55.433" endtime="20220410 10:30:55.557"/>
+</test>
+<test id="s1-s1-t5" name="User Story 4 Test complete flow">
+<kw name="Create Session" library="RequestsLibrary">
+<arg>mysession</arg>
+<arg>${base_url}</arg>
+<doc>Create Session: create a HTTP session to a server</doc>
+<msg timestamp="20220410 10:30:55.562" level="INFO">Creating Session using : alias=mysession, url=http://localhost:8080, headers={},                     cookies={}, auth=None, timeout=None, proxies=None, verify=False,                     debug=0 </msg>
+<status status="PASS" starttime="20220410 10:30:55.562" endtime="20220410 10:30:55.563"/>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<var>${body}</var>
+<arg>birthday=15121912</arg>
+<arg>gender=M</arg>
+<arg>name=John</arg>
+<arg>natid=N91676</arg>
+<arg>salary=300</arg>
+<arg>tax=270.50</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<msg timestamp="20220410 10:30:55.564" level="INFO">${body} = {'birthday': '15121912', 'gender': 'M', 'name': 'John', 'natid': 'N91676', 'salary': '300', 'tax': '270.50'}</msg>
+<status status="PASS" starttime="20220410 10:30:55.563" endtime="20220410 10:30:55.564"/>
+</kw>
+<kw name="Create Dictionary" library="BuiltIn">
+<var>${header}</var>
+<arg>content-type=application/json</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<msg timestamp="20220410 10:30:55.566" level="INFO">${header} = {'content-type': 'application/json'}</msg>
+<status status="PASS" starttime="20220410 10:30:55.565" endtime="20220410 10:30:55.566"/>
+</kw>
+<kw name="Post Request" library="RequestsLibrary">
+<var>${response}</var>
+<arg>mysession</arg>
+<arg>/calculator/insert</arg>
+<arg>data=${body}</arg>
+<arg>headers=${header}</arg>
+<doc>*DEPRECATED* Please use `POST On Session` instead.</doc>
+<msg timestamp="20220410 10:30:55.566" level="WARN">Keyword 'RequestsLibrary.Post Request' is deprecated. Please use `POST On Session` instead.</msg>
+<msg timestamp="20220410 10:30:55.582" level="INFO">POST Request : url=http://localhost:8080/calculator/insert 
+ path_url=/calculator/insert 
+ headers={'User-Agent': 'python-requests/2.27.1', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive', 'content-type': 'application/json', 'Content-Length': '108'} 
+ body={"birthday": "15121912", "gender": "M", "name": "John", "natid": "N91676", "salary": "300", "tax": "270.50"} 
+ </msg>
+<msg timestamp="20220410 10:30:55.582" level="INFO">POST Response : url=http://localhost:8080/calculator/insert 
+ status=202, reason= 
+ headers={'Content-Type': 'text/plain;charset=UTF-8', 'Content-Length': '7', 'Date': 'Sun, 10 Apr 2022 05:00:55 GMT'} 
+ body=Alright 
+ </msg>
+<msg timestamp="20220410 10:30:55.582" level="INFO">${response} = &lt;Response [202]&gt;</msg>
+<status status="PASS" starttime="20220410 10:30:55.566" endtime="20220410 10:30:55.582"/>
+</kw>
+<kw name="Get Request" library="RequestsLibrary">
+<var>${response}</var>
+<arg>mysession</arg>
+<arg>/calculator/taxRelief</arg>
+<doc>*DEPRECATED* Please use `GET On Session` instead.</doc>
+<msg timestamp="20220410 10:30:55.585" level="WARN">Keyword 'RequestsLibrary.Get Request' is deprecated. Please use `GET On Session` instead.</msg>
+<msg timestamp="20220410 10:30:55.600" level="INFO">GET Request : url=http://localhost:8080/calculator/taxRelief 
+ path_url=/calculator/taxRelief 
+ headers={'User-Agent': 'python-requests/2.27.1', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive'} 
+ body=None 
+ </msg>
+<msg timestamp="20220410 10:30:55.601" level="INFO">GET Response : url=http://localhost:8080/calculator/taxRelief 
+ status=200, reason= 
+ headers={'Content-Type': 'application/json;charset=UTF-8', 'Transfer-Encoding': 'chunked', 'Date': 'Sun, 10 Apr 2022 05:00:55 GMT'} 
+ body=[{"natid":"N096$$","name":"John","relief":"5200.00"},{"natid":"N267$","name":"John","relief":"2000.00"},{"natid":"N367$","name":"John","relief":"2300.00"},{"natid":"N467$","name":"John","relief":"3600.00"},{"natid":"N916$$","name":"John","relief":"50.00"}] 
+ </msg>
+<msg timestamp="20220410 10:30:55.601" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<status status="PASS" starttime="20220410 10:30:55.584" endtime="20220410 10:30:55.601"/>
+</kw>
+<kw name="calculate tax relief" library="Tax">
+<var>${taxcalculation}</var>
+<arg>${body}</arg>
+<arg>${response.content}</arg>
+<doc>Created by : Amaresh Pathak
+Date : 19/03/2022
+This keyword is designed to callulate the tax relief amount and validate the value from actual
+tax relief amount updated in database</doc>
+<msg timestamp="20220410 10:30:55.606" level="INFO">Pass - id = N916 and classdata natid = N916
+{'birthday': '15121912', 'gender': 'M', 'name': 'John', 'natid': 'N91676', 'salary': '300', 'tax': '270.50'}
+{'natid': 'N916$$', 'name': 'John', 'relief': '50.00'}
+Salary - 300, tax - 270.50, var - 0.05, Bonus - 0
+taxrelief after calc = 50
+i[relief] - 50.00,taxrelief - 50</msg>
+<msg timestamp="20220410 10:30:55.607" level="INFO">${taxcalculation} = Pass</msg>
+<status status="PASS" starttime="20220410 10:30:55.603" endtime="20220410 10:30:55.607"/>
+</kw>
+<kw name="Convert To String" library="BuiltIn">
+<var>${status_code}</var>
+<arg>${response.status_code}</arg>
+<doc>Converts the given item to a Unicode string.</doc>
+<msg timestamp="20220410 10:30:55.609" level="INFO">${status_code} = 200</msg>
+<status status="PASS" starttime="20220410 10:30:55.607" endtime="20220410 10:30:55.609"/>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<arg>${status_code}</arg>
+<arg>200</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" starttime="20220410 10:30:55.609" endtime="20220410 10:30:55.610"/>
+</kw>
+<tag>taxcalc</tag>
+<status status="PASS" starttime="20220410 10:30:55.561" endtime="20220410 10:30:55.610"/>
+</test>
+<doc>Suite description</doc>
+<status status="PASS" starttime="20220410 10:30:53.793" endtime="20220410 10:30:55.613"/>
+</suite>
+<status status="PASS" starttime="20220410 10:30:53.764" endtime="20220410 10:30:55.617"/>
+</suite>
+<statistics>
+<total>
+<stat pass="5" fail="0" skip="0">All Tests</stat>
+</total>
+<tag>
+<stat pass="1" fail="0" skip="0">appstatus</stat>
+<stat pass="1" fail="0" skip="0">multi</stat>
+<stat pass="1" fail="0" skip="0">single</stat>
+<stat pass="1" fail="0" skip="0">taxcalc</stat>
+<stat pass="1" fail="0" skip="0">taxrelief</stat>
+</tag>
+<suite>
+<stat pass="5" fail="0" skip="0" id="s1" name="Testcases">Testcases</stat>
+<stat pass="5" fail="0" skip="0" id="s1-s1" name="Main">Testcases.Main</stat>
+</suite>
+</statistics>
+<errors>
+<msg timestamp="20220410 10:30:53.938" level="WARN">Keyword 'RequestsLibrary.Get Request' is deprecated. Please use `GET On Session` instead.</msg>
+<msg timestamp="20220410 10:30:55.067" level="WARN">Keyword 'RequestsLibrary.Post Request' is deprecated. Please use `POST On Session` instead.</msg>
+<msg timestamp="20220410 10:30:55.366" level="WARN">Keyword 'RequestsLibrary.Post Request' is deprecated. Please use `POST On Session` instead.</msg>
+<msg timestamp="20220410 10:30:55.443" level="WARN">Keyword 'RequestsLibrary.Get Request' is deprecated. Please use `GET On Session` instead.</msg>
+<msg timestamp="20220410 10:30:55.566" level="WARN">Keyword 'RequestsLibrary.Post Request' is deprecated. Please use `POST On Session` instead.</msg>
+<msg timestamp="20220410 10:30:55.585" level="WARN">Keyword 'RequestsLibrary.Get Request' is deprecated. Please use `GET On Session` instead.</msg>
+</errors>
+</robot>
